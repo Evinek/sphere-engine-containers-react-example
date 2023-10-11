@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Workspace from './Workspace';
 
-const SECO_SDK_SCRIPT_URL = 'https://test.dev-sea.sphere-engine.com/static/sdk/sdk.min.js';
-
 const Ide = () => {
 
   const [workspaceKey, setWorkspaceKey] = useState(0); // only for force reload workspace
@@ -10,38 +8,46 @@ const Ide = () => {
 
   // only for force reload workspace
   const reloadWorkspace = () => {
+    console.log('reloadWorkspace()');
     setWorkspaceKey(workspaceKey + 1);
   };
 
   useEffect(() => {
-    console.log('Add SDK');
-    window.SE_BASE = "test.dev-sea.sphere-engine.com";
-    window.SE_HTTPS = true;
-    window.SE = window.SE || (window.SE = []);
-    const script = document.createElement("script");
-    script.id = 'sphere-engine-compilers-jssdk';
-    script.src = SECO_SDK_SCRIPT_URL;
-    script.async = true;
-    script.onload = () => {
+    window.SE.ready(() => {
       console.log('SDKReady');
       setSDKReady(true);
-    };
-    document.body.appendChild(script);
-
-    return () => {
-      console.log('remove SDK');
-      const scriptElem = document.getElementById('sphere-engine-compilers-jssdk');
-      scriptElem.remove();
-    };
+    });
   }, []);
+
+  // DON'T DO THAT
+  // useEffect(() => {
+  //   console.log('Add SDK');
+  //   window.SE_BASE = "containers.sphere-engine.com";
+  //   window.SE_HTTPS = true;
+  //   window.SE = window.SE || (window.SE = []);
+  //   const script = document.createElement("script");
+  //   script.id = 'sphere-engine-compilers-jssdk';
+  //   script.src = 'https://TODO.containers.sphere-engine.com/static/sdk/sdk.min.js';
+  //   script.async = true;
+  //   script.onload = () => {
+  //     console.log('SDKReady');
+  //     setSDKReady(true);
+  //   };
+  //   document.body.appendChild(script);
+  //   return () => {
+  //     console.log('remove SDK');
+  //     const scriptElem = document.getElementById('sphere-engine-compilers-jssdk');
+  //     scriptElem.remove();
+  //   };
+  // }, []);
 
   let workspace = 'loading SDK...';
   if (SDKReady) {
     workspace = (
       <Workspace
         key={workspaceKey} // only for force reload workspace
-        workspaceId="ee713e66c7c9437188b536a1414c7e77"
-        workspaceToken="4bb6a8f7-80fc-4adf-a5ea-b7f4690ab28b"
+        workspaceId="5519355568ee412580aaff0a40a60032"
+        workspaceToken="02f84d84-3831-4d97-8b2f-b3defc1cd92c"
       ></Workspace>
     );
   }
